@@ -1,6 +1,41 @@
 @backend_HostAddress = http://localhost:5211
 
-GET {{backend_HostAddress}}/weatherforecast/
-Accept: application/json
+### Health
+GET {{backend_HostAddress}}/health
 
-###
+### Current development user
+GET {{backend_HostAddress}}/api/me
+
+### Conversations
+GET {{backend_HostAddress}}/api/conversations
+
+### Create a conversation
+POST {{backend_HostAddress}}/api/conversations
+Content-Type: application/json
+
+{
+  "title": "Monday planning"
+}
+
+### Tasks
+GET {{backend_HostAddress}}/api/tasks
+
+### Create a task
+POST {{backend_HostAddress}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Buy groceries",
+  "description": "Pick up groceries after work",
+  "priority": "Normal",
+  "estimatedMinutes": 30
+}
+
+### Commitments
+GET {{backend_HostAddress}}/api/commitments
+
+### Planning context
+GET {{backend_HostAddress}}/api/planning-context
+
+### Today's plan
+GET {{backend_HostAddress}}/api/plans/2026-09-21

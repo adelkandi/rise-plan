@@ -2,12 +2,20 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using backend.Data;
 using backend;
+using backend.Endpoints;
+using backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IConversationService, ConversationService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ICommitmentService, CommitmentService>();
+builder.Services.AddScoped<IDailyPlanService, DailyPlanService>();
+builder.Services.AddScoped<IPlanningContextService, PlanningContextService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -18,7 +26,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = ConnectionStringNormalizer.Normalize(
+    builder.Configuration.GetConnectionString("DefaultConnection"));
 if (!string.IsNullOrWhiteSpace(connectionString))
 {
     builder.Services.AddDbContext<AppDbContext>(options =>
@@ -64,5 +73,7 @@ app.MapGet("/api/me", (HttpContext context) =>
 .WithName("GetCurrentUser")
 .WithSummary("Returns the current development user.")
 .Produces(StatusCodes.Status200OK);
+
+app.MapApplicationEndpoints();
 
 app.Run();
