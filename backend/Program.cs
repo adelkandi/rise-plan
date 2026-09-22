@@ -4,6 +4,7 @@ using backend.Data;
 using backend;
 using backend.Endpoints;
 using backend.Services;
+using backend.Planning;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ICommitmentService, CommitmentService>();
 builder.Services.AddScoped<IDailyPlanService, DailyPlanService>();
 builder.Services.AddScoped<IPlanningContextService, PlanningContextService>();
+builder.Services.AddScoped<IPlanningContextReader, PlanningContextReader>();
+builder.Services.AddScoped<IPlanningAgent, DevelopmentPlanningAgent>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -75,5 +78,6 @@ app.MapGet("/api/me", (HttpContext context) =>
 .Produces(StatusCodes.Status200OK);
 
 app.MapApplicationEndpoints();
+app.MapChatEndpoints();
 
 app.Run();

@@ -10,6 +10,7 @@ public interface IConversationService
     Task<ConversationDetailsResponse?> GetAsync(string userId, Guid conversationId, CancellationToken ct);
     Task<ConversationResponse> CreateAsync(string userId, CreateConversationRequest request, CancellationToken ct);
     Task<MessageResponse?> AddMessageAsync(string userId, Guid conversationId, CreateMessageRequest request, CancellationToken ct);
+    Task<MessageResponse?> AddAssistantMessageAsync(string userId, Guid conversationId, string content, CancellationToken ct);
 }
 
 public sealed class ConversationService(AppDbContext db) : IConversationService
@@ -55,6 +56,25 @@ public sealed class ConversationService(AppDbContext db) : IConversationService
             return null;
 
         var message = new Message { ConversationId = conversationId, Role = MessageRole.User, Content = request.Content.Trim() };
+        conversation.UpdatedAt = DateTimeOffset.UtcNow;
+        db.Messages.Add(message);
+        await db.SaveChangesAsync(ct);
+        return new(message.Id, message.Role, message.Content, message.CreatedAt);
+    }
+
+    public async Task<MessageResponse?> AddAssistantMessageAsync(string userId, Guid conversationId, string content, CancellationToken ct)
+    {
+        var conversation = await db.Conversations.SingleOrDefaultAsync(
+            item => item.Id == conversationId && item.UserId == userId, ct);
+        if (conversation is null)
+            return null;
+
+        var message = new Message
+        {
+            ConversationId = conversationId,
+            Role = MessageRole.Assistant,
+            Content = content
+        };
         conversation.UpdatedAt = DateTimeOffset.UtcNow;
         db.Messages.Add(message);
         await db.SaveChangesAsync(ct);
