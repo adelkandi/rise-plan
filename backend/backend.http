@@ -40,7 +40,7 @@ GET {{backend_HostAddress}}/api/planning-context
 ### Today's plan
 GET {{backend_HostAddress}}/api/plans/2026-09-21
 
-### Planning agent (development implementation)
+### Planning agent (development implementation or OpenAI when OpenAI:ApiKey is configured)
 POST {{backend_HostAddress}}/api/chat/message
 Content-Type: application/json
 

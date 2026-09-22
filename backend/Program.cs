@@ -18,7 +18,20 @@ builder.Services.AddScoped<ICommitmentService, CommitmentService>();
 builder.Services.AddScoped<IDailyPlanService, DailyPlanService>();
 builder.Services.AddScoped<IPlanningContextService, PlanningContextService>();
 builder.Services.AddScoped<IPlanningContextReader, PlanningContextReader>();
-builder.Services.AddScoped<IPlanningAgent, DevelopmentPlanningAgent>();
+builder.Services.AddScoped<IAgentToolExecutor, AgentToolExecutor>();
+builder.Services.AddHttpClient("OpenAI", client =>
+{
+    client.BaseAddress = new Uri("https://api.openai.com/");
+    client.Timeout = TimeSpan.FromSeconds(60);
+});
+if (!builder.Configuration.GetValue<bool>("OpenAI:Enabled"))
+{
+    builder.Services.AddScoped<IPlanningAgent, DevelopmentPlanningAgent>();
+}
+else
+{
+    builder.Services.AddScoped<IPlanningAgent, DevelopmentPlanningAgent.OpenAiPlanningAgent>();
+}
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
