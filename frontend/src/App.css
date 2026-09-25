@@ -16,9 +16,17 @@ h1 { color: #18181b; font-size: clamp(2.3rem, 8vw, 4.3rem); letter-spacing: -.07
 .message-user { align-self: flex-end; background: #e9e7ff; border-radius: 18px 5px 18px 18px; padding: 14px 18px; }
 .message-label { color: #6d5ef5; display: block; font-size: .68rem; font-weight: 700; letter-spacing: .1em; margin-bottom: 5px; text-transform: uppercase; }
 .response-suggestions { display: grid; gap: 8px; margin-top: 15px; }
-.response-suggestion { background: #f7f7f4; border-radius: 10px; display: grid; gap: 3px; padding: 10px 12px; }
+.response-suggestion { background: #f7f7f4; border-left: 3px solid #b8b4f8; border-radius: 10px; display: grid; gap: 5px; padding: 11px 12px; }
+.response-decision { border-left-color: #e6a23c; }
+.response-question { border-left-color: #6d5ef5; }
+.response-summary { border-left-color: #4caf7d; }
 .response-suggestion strong { font-size: .8rem; }
 .response-suggestion span { color: #71717a; font-size: .78rem; }
+.response-type { color: #6d5ef5 !important; font-size: .63rem !important; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.response-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 5px; }
+.response-actions button, .response-action-primary { background: #fff; border: 1px solid #d4d4d8; border-radius: 999px; color: #5146c8; cursor: pointer; font: inherit; font-size: .7rem; padding: 6px 9px; }
+.response-actions button:hover, .response-actions button:focus-visible { border-color: #6d5ef5; }
+.response-action-primary { background: #6d5ef5; border-color: #6d5ef5; color: #fff; justify-self: start; margin-top: 5px; }
 .typing { color: #a1a1aa; font-size: .85rem; }
 .typing span { animation: blink 1s infinite; }
 .prompt-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 14px; }

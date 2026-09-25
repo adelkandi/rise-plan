@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import type { PlanningSuggestion } from './api'
-import { sendChatMessage } from './api'
+import { createTask, sendChatMessage } from './api'
 import './App.css'
 
 type ChatMessage = {
@@ -9,6 +9,65 @@ type ChatMessage = {
   role: 'rise' | 'user'
   content: string
   suggestions?: PlanningSuggestion[]
+}
+
+type StructuredResponseProps = {
+  suggestion: PlanningSuggestion
+  onFollowUp: (message: string) => void
+  onCreateTask: (suggestion: PlanningSuggestion) => void
+  actionKey: string | null
+}
+
+function StructuredResponse({
+  suggestion,
+  onFollowUp,
+  onCreateTask,
+  actionKey,
+}: StructuredResponseProps) {
+  const labels: Record<string, string> = {
+    decision: 'Decision',
+    question: 'Question',
+    suggestion: 'Suggestion',
+    summary: 'Context',
+    task: 'Task',
+    plan: 'Plan',
+  }
+
+  return (
+    <div className={`response-suggestion response-${suggestion.type}`}>
+      <span className="response-type">{labels[suggestion.type] ?? 'Rise suggests'}</span>
+      <strong>{suggestion.title}</strong>
+      {suggestion.description && <span>{suggestion.description}</span>}
+      {(suggestion.type === 'decision' || suggestion.type === 'question') && (
+        <div className="response-actions">
+          <button
+            type="button"
+            disabled={actionKey !== null}
+            onClick={() => onFollowUp(`I want to think about: ${suggestion.title}`)}
+          >
+            Think about this
+          </button>
+          <button
+            type="button"
+            disabled={actionKey !== null}
+            onClick={() => onFollowUp(`Tell me more about: ${suggestion.title}`)}
+          >
+            Tell Rise more
+          </button>
+        </div>
+      )}
+      {suggestion.type === 'task' && (
+        <button
+          className="response-action-primary"
+          type="button"
+          disabled={actionKey !== null}
+          onClick={() => onCreateTask(suggestion)}
+        >
+          {actionKey === suggestion.title ? 'Adding...' : 'Add to tasks'}
+        </button>
+      )}
+    </div>
+  )
 }
 
 const initialMessage: ChatMessage = {
@@ -26,10 +85,9 @@ function App() {
   const [draft, setDraft] = useState('')
   const [isSending, setIsSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [actionKey, setActionKey] = useState<string | null>(null)
 
-  async function submitMessage(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const content = draft.trim()
+  async function sendMessage(content: string) {
     if (!content || isSending) return
 
     setDraft('')
@@ -53,6 +111,32 @@ function App() {
       setError(requestError instanceof Error ? requestError.message : 'Something went wrong.')
     } finally {
       setIsSending(false)
+    }
+  }
+
+  async function submitMessage(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    await sendMessage(draft.trim())
+  }
+
+  async function createSuggestedTask(suggestion: PlanningSuggestion) {
+    if (actionKey !== null) return
+    setActionKey(suggestion.title)
+    setError(null)
+    try {
+      await createTask(suggestion.title, suggestion.description)
+      setMessages((current) => [
+        ...current,
+        {
+          id: Date.now(),
+          role: 'rise',
+          content: `Added "${suggestion.title}" to your tasks.`,
+        },
+      ])
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Could not create the task.')
+    } finally {
+      setActionKey(null)
     }
   }
 
@@ -81,10 +165,13 @@ function App() {
               {message.suggestions && message.suggestions.length > 0 && (
                 <div className="response-suggestions">
                   {message.suggestions.map((suggestion) => (
-                    <div className="response-suggestion" key={`${message.id}-${suggestion.title}`}>
-                      <strong>{suggestion.title}</strong>
-                      {suggestion.description && <span>{suggestion.description}</span>}
-                    </div>
+                    <StructuredResponse
+                      key={`${message.id}-${suggestion.title}`}
+                      suggestion={suggestion}
+                      onFollowUp={sendMessage}
+                      onCreateTask={createSuggestedTask}
+                      actionKey={actionKey}
+                    />
                   ))}
                 </div>
               )}

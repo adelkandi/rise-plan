@@ -15,6 +15,17 @@ export type ChatMessageResponse = {
   planning: PlanningResponse
 }
 
+export type TaskResponse = {
+  id: string
+  title: string
+  description?: string
+  status: string
+  priority: string
+  estimatedMinutes?: number
+  dueDate?: string
+  completedAt?: string
+}
+
 const apiBaseUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:5211'
 
 export async function sendChatMessage(
@@ -32,4 +43,18 @@ export async function sendChatMessage(
   }
 
   return response.json() as Promise<ChatMessageResponse>
+}
+
+export async function createTask(title: string, description?: string): Promise<TaskResponse> {
+  const response = await fetch(`${apiBaseUrl}/api/tasks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title, description, priority: 'Normal' }),
+  })
+
+  if (!response.ok) {
+    throw new Error(`Creating the task failed with status ${response.status}.`)
+  }
+
+  return response.json() as Promise<TaskResponse>
 }

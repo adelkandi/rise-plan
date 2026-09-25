@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\backend.Tests.csproj": {}
+    "C:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\backend.Tests.csproj": {}
   },
   "projects": {
-    "c:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\backend.Tests.csproj": {
+    "C:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\backend.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\backend.Tests.csproj",
+        "projectUniqueName": "C:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\backend.Tests.csproj",
         "projectName": "backend.Tests",
-        "projectPath": "c:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\backend.Tests.csproj",
+        "projectPath": "C:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\backend.Tests.csproj",
         "packagesPath": "C:\\Users\\adelk\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\obj\\",
+        "outputPath": "C:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

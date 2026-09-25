@@ -5,6 +5,7 @@ using backend;
 using backend.Endpoints;
 using backend.Services;
 using backend.Planning;
+using backend.Calendar;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IDailyPlanService, DailyPlanService>();
 builder.Services.AddScoped<IPlanningContextService, PlanningContextService>();
 builder.Services.AddScoped<IPlanningContextReader, PlanningContextReader>();
 builder.Services.AddScoped<IAgentToolExecutor, AgentToolExecutor>();
+builder.Services.AddSingleton<ICalendarProvider, DevelopmentCalendarProvider>();
 builder.Services.AddHttpClient("OpenAI", client =>
 {
     client.BaseAddress = new Uri("https://api.openai.com/");
@@ -92,5 +94,6 @@ app.MapGet("/api/me", (HttpContext context) =>
 
 app.MapApplicationEndpoints();
 app.MapChatEndpoints();
+app.MapCalendarEndpoints();
 
 app.Run();

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UokngI6s7Sg=",
+  "dgSpecHash": "cqHeR58eAaQ=",
   "success": true,
-  "projectFilePath": "c:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\backend.Tests.csproj",
+  "projectFilePath": "C:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\backend.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\adelk\\.nuget\\packages\\coverlet.collector\\6.0.2\\coverlet.collector.6.0.2.nupkg.sha512",
     "C:\\Users\\adelk\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.14\\microsoft.aspnetcore.openapi.9.0.14.nupkg.sha512",

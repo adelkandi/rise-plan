@@ -48,3 +48,19 @@ Content-Type: application/json
   "conversationId": null,
   "message": "I feel overwhelmed. I have work, groceries, the gym, and a tentative dinner."
 }
+
+### Calendar events (development provider)
+GET {{backend_HostAddress}}/api/calendar/events?from=2026-09-21T00:00:00Z&to=2026-09-22T00:00:00Z
+
+### Create calendar event (requires explicit confirmation)
+POST {{backend_HostAddress}}/api/calendar/events
+Content-Type: application/json
+
+{
+  "title": "Interview preparation",
+  "description": "Prepare for the interview",
+  "startTime": "2026-09-21T09:00:00Z",
+  "endTime": "2026-09-21T10:30:00Z",
+  "location": null,
+  "confirmed": true
+}
