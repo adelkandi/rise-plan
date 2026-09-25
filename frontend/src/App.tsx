@@ -1,7 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import type { PlanningSuggestion } from './api'
-import { createTask, sendChatMessage } from './api'
+import {
+  createTask,
+  disconnectCalendar,
+  getCalendarConnection,
+  getGoogleCalendarConnectUrl,
+  sendChatMessage,
+} from './api'
 import './App.css'
 
 type ChatMessage = {
@@ -86,6 +92,32 @@ function App() {
   const [isSending, setIsSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [actionKey, setActionKey] = useState<string | null>(null)
+  const [calendarConnected, setCalendarConnected] = useState(false)
+  const [calendarBusy, setCalendarBusy] = useState(false)
+
+  useEffect(() => {
+    void getCalendarConnection()
+      .then((connection) => setCalendarConnected(connection.connected))
+      .catch(() => setCalendarConnected(false))
+  }, [])
+
+  function connectCalendar() {
+    window.location.assign(getGoogleCalendarConnectUrl())
+  }
+
+  async function disconnectGoogleCalendar() {
+    if (calendarBusy) return
+    setCalendarBusy(true)
+    setError(null)
+    try {
+      await disconnectCalendar()
+      setCalendarConnected(false)
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Could not disconnect the calendar.')
+    } finally {
+      setCalendarBusy(false)
+    }
+  }
 
   async function sendMessage(content: string) {
     if (!content || isSending) return
@@ -147,7 +179,18 @@ function App() {
           <span className="brand-mark" aria-hidden="true">R</span>
           <span>rise</span>
         </a>
-        <span className="status"><span className="status-dot" />Local planner</span>
+        <div className="topbar-actions">
+          <span className="status"><span className="status-dot" />Local planner</span>
+          {calendarConnected ? (
+            <button className="calendar-button connected" type="button" onClick={disconnectGoogleCalendar} disabled={calendarBusy}>
+              {calendarBusy ? 'Disconnecting...' : 'Google Calendar connected'}
+            </button>
+          ) : (
+            <button className="calendar-button" type="button" onClick={connectCalendar}>
+              Connect Google Calendar
+            </button>
+          )}
+        </div>
       </header>
 
       <section className="conversation" aria-labelledby="greeting">

@@ -26,6 +26,11 @@ export type TaskResponse = {
   completedAt?: string
 }
 
+export type CalendarConnectionResponse = {
+  provider: string
+  connected: boolean
+}
+
 const apiBaseUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:5211'
 
 export async function sendChatMessage(
@@ -57,4 +62,23 @@ export async function createTask(title: string, description?: string): Promise<T
   }
 
   return response.json() as Promise<TaskResponse>
+}
+
+export async function getCalendarConnection(): Promise<CalendarConnectionResponse> {
+  const response = await fetch(`${apiBaseUrl}/api/calendar/connection`)
+  if (!response.ok) {
+    throw new Error(`Checking calendar connection failed with status ${response.status}.`)
+  }
+  return response.json() as Promise<CalendarConnectionResponse>
+}
+
+export function getGoogleCalendarConnectUrl(): string {
+  return `${apiBaseUrl}/api/calendar/connect/google`
+}
+
+export async function disconnectCalendar(): Promise<void> {
+  const response = await fetch(`${apiBaseUrl}/api/calendar/connection`, { method: 'DELETE' })
+  if (!response.ok) {
+    throw new Error(`Disconnecting the calendar failed with status ${response.status}.`)
+  }
 }

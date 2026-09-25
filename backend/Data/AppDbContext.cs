@@ -13,6 +13,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<DailyPlan> DailyPlans => Set<DailyPlan>();
     public DbSet<PlanItem> PlanItems => Set<PlanItem>();
     public DbSet<UserPlanningContext> UserPlanningContexts => Set<UserPlanningContext>();
+    public DbSet<CalendarConnection> CalendarConnections => Set<CalendarConnection>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -118,6 +119,19 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
             entity.HasOne(context => context.User)
                 .WithOne(user => user.PlanningContext)
                 .HasForeignKey<UserPlanningContext>(context => context.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<CalendarConnection>(entity =>
+        {
+            entity.HasKey(connection => connection.Id);
+            entity.Property(connection => connection.Provider).HasMaxLength(50);
+            entity.Property(connection => connection.AccessTokenEncrypted).HasMaxLength(4_000);
+            entity.Property(connection => connection.RefreshTokenEncrypted).HasMaxLength(4_000);
+            entity.HasIndex(connection => new { connection.UserId, connection.Provider }).IsUnique();
+            entity.HasOne(connection => connection.User)
+                .WithMany()
+                .HasForeignKey(connection => connection.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

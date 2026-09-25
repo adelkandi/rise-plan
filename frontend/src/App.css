@@ -1,9 +1,14 @@
 .app-shell { min-height: 100svh; background: #f7f7f4; color: #18181b; }
 .topbar { align-items: center; display: flex; justify-content: space-between; max-width: 760px; margin: 0 auto; padding: 24px 20px; }
+.topbar-actions { align-items: center; display: flex; gap: 14px; }
 .brand { align-items: center; color: #18181b; display: inline-flex; font-size: 1.2rem; font-weight: 700; gap: 9px; letter-spacing: -.04em; text-decoration: none; }
 .brand-mark { align-items: center; background: #6d5ef5; border-radius: 50%; color: white; display: inline-flex; font-size: .8rem; height: 28px; justify-content: center; width: 28px; }
 .status { align-items: center; color: #71717a; display: flex; font-size: .72rem; gap: 7px; }
 .status-dot { background: #4caf7d; border-radius: 50%; height: 7px; width: 7px; }
+.calendar-button { background: transparent; border: 1px solid #d4d4d8; border-radius: 999px; color: #5146c8; cursor: pointer; font: inherit; font-size: .7rem; padding: 7px 10px; }
+.calendar-button:hover, .calendar-button:focus-visible { border-color: #6d5ef5; }
+.calendar-button.connected { color: #397d5a; }
+.calendar-button:disabled { cursor: wait; opacity: .6; }
 .conversation { display: flex; flex-direction: column; margin: 0 auto; max-width: 680px; min-height: calc(100svh - 80px); padding: clamp(48px, 10vh, 100px) 20px 32px; }
 .conversation-heading { margin-bottom: 48px; }
 .eyebrow { color: #6d5ef5; font-size: .7rem; font-weight: 700; letter-spacing: .13em; margin: 0 0 14px; text-transform: uppercase; }
@@ -42,4 +47,4 @@ h1 { color: #18181b; font-size: clamp(2.3rem, 8vw, 4.3rem); letter-spacing: -.07
 .composer-hint { color: #a1a1aa; font-size: .7rem; margin: 12px 0 0; text-align: center; }
 .sr-only { height: 1px; margin: -1px; overflow: hidden; position: absolute; width: 1px; clip: rect(0, 0, 0, 0); }
 @keyframes blink { 50% { opacity: .3; } }
-@media (max-width: 520px) { .topbar { padding: 18px 16px; } .conversation { min-height: calc(100svh - 64px); padding: 36px 16px 24px; } .conversation-heading { margin-bottom: 36px; } }
+@media (max-width: 520px) { .topbar { align-items: flex-start; padding: 18px 16px; } .topbar-actions { align-items: flex-end; flex-direction: column; gap: 8px; } .conversation { min-height: calc(100svh - 64px); padding: 36px 16px 24px; } .conversation-heading { margin-bottom: 36px; } }

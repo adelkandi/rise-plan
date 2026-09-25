@@ -64,3 +64,5 @@ Content-Type: application/json
   "location": null,
   "confirmed": true
 }
+
+### Google Calendar is opt-in through Google:Enabled and a server-side Google:AccessToken

@@ -107,3 +107,16 @@ public sealed class UserPlanningContext
     public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
     public UserProfile User { get; set; } = null!;
 }
+
+public sealed class CalendarConnection
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public required string UserId { get; set; }
+    public required string Provider { get; set; }
+    public required string AccessTokenEncrypted { get; set; }
+    public string? RefreshTokenEncrypted { get; set; }
+    public DateTimeOffset? TokenExpiresAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public UserProfile User { get; set; } = null!;
+}

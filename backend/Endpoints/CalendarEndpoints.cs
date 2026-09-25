@@ -10,6 +10,51 @@ public static class CalendarEndpoints
     {
         var group = app.MapGroup("/api/calendar").RequireAuthorization();
 
+        group.MapGet("/connection", async (
+            HttpContext http,
+            ICurrentUserService users,
+            IGoogleCalendarConnectionService connections,
+            CancellationToken ct) =>
+        {
+            var userId = users.GetRequiredUserId(http.User);
+            return Results.Ok(new { provider = "Google", connected = await connections.IsConnectedAsync(userId, ct) });
+        })
+        .WithName("GetCalendarConnection")
+        .WithSummary("Returns the current user's Google Calendar connection status.");
+
+        group.MapGet("/connect/google", (
+            HttpContext http,
+            ICurrentUserService users,
+            IGoogleCalendarConnectionService connections) =>
+            Results.Redirect(connections.CreateAuthorizationUrl(users.GetRequiredUserId(http.User))))
+        .WithName("ConnectGoogleCalendar")
+        .WithSummary("Starts Google Calendar authorization.");
+
+        group.MapDelete("/connection", async (
+            HttpContext http,
+            ICurrentUserService users,
+            IGoogleCalendarConnectionService connections,
+            CancellationToken ct) =>
+        {
+            await connections.DisconnectAsync(users.GetRequiredUserId(http.User), ct);
+            return Results.NoContent();
+        })
+        .WithName("DisconnectCalendar")
+        .WithSummary("Disconnects Google Calendar for the current user.");
+
+        app.MapGet("/api/calendar/oauth/google/callback", async (
+            string state,
+            string code,
+            IGoogleCalendarConnectionService connections,
+            IConfiguration configuration,
+            CancellationToken ct) =>
+        {
+            await connections.CompleteAuthorizationAsync(state, code, ct);
+            return Results.Redirect(configuration["Google:FrontendRedirectUri"] ?? "http://localhost:5173");
+        })
+        .WithName("GoogleCalendarCallback")
+        .WithSummary("Completes Google Calendar authorization.");
+
         group.MapGet("/events", async (
             DateTimeOffset from,
             DateTimeOffset to,

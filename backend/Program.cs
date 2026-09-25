@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
+builder.Services.AddDataProtection();
 builder.Services.AddHealthChecks();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IConversationService, ConversationService>();
@@ -20,7 +21,21 @@ builder.Services.AddScoped<IDailyPlanService, DailyPlanService>();
 builder.Services.AddScoped<IPlanningContextService, PlanningContextService>();
 builder.Services.AddScoped<IPlanningContextReader, PlanningContextReader>();
 builder.Services.AddScoped<IAgentToolExecutor, AgentToolExecutor>();
-builder.Services.AddSingleton<ICalendarProvider, DevelopmentCalendarProvider>();
+builder.Services.AddHttpClient("GoogleCalendar", client =>
+{
+    client.BaseAddress = new Uri("https://www.googleapis.com/calendar/v3/");
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
+builder.Services.AddHttpClient("GoogleOAuth");
+builder.Services.AddScoped<IGoogleCalendarConnectionService, GoogleCalendarConnectionService>();
+if (builder.Configuration.GetValue<bool>("Google:Enabled"))
+{
+    builder.Services.AddScoped<ICalendarProvider, GoogleCalendarProvider>();
+}
+else
+{
+    builder.Services.AddSingleton<ICalendarProvider, DevelopmentCalendarProvider>();
+}
 builder.Services.AddHttpClient("OpenAI", client =>
 {
     client.BaseAddress = new Uri("https://api.openai.com/");
