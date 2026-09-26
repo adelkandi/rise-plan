@@ -31,6 +31,16 @@ export type CalendarConnectionResponse = {
   connected: boolean
 }
 
+export type CalendarEvent = {
+  id: string
+  userId: string
+  title: string
+  description?: string
+  startTime: string
+  endTime: string
+  location?: string
+}
+
 const apiBaseUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:5211'
 
 export async function sendChatMessage(
@@ -81,4 +91,19 @@ export async function disconnectCalendar(): Promise<void> {
   if (!response.ok) {
     throw new Error(`Disconnecting the calendar failed with status ${response.status}.`)
   }
+}
+
+export async function getCalendarEvents(
+  from: Date,
+  to: Date,
+): Promise<CalendarEvent[]> {
+  const query = new URLSearchParams({
+    from: from.toISOString(),
+    to: to.toISOString(),
+  })
+  const response = await fetch(`${apiBaseUrl}/api/calendar/events?${query}`)
+  if (!response.ok) {
+    throw new Error(`Loading calendar events failed with status ${response.status}.`)
+  }
+  return response.json() as Promise<CalendarEvent[]>
 }

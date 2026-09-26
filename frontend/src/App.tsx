@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
-import type { PlanningSuggestion } from './api'
+import type { CalendarEvent, PlanningSuggestion } from './api'
 import {
   createTask,
   disconnectCalendar,
   getCalendarConnection,
+  getCalendarEvents,
   getGoogleCalendarConnectUrl,
   sendChatMessage,
 } from './api'
@@ -94,10 +95,20 @@ function App() {
   const [actionKey, setActionKey] = useState<string | null>(null)
   const [calendarConnected, setCalendarConnected] = useState(false)
   const [calendarBusy, setCalendarBusy] = useState(false)
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([])
 
   useEffect(() => {
     void getCalendarConnection()
-      .then((connection) => setCalendarConnected(connection.connected))
+      .then(async (connection) => {
+        setCalendarConnected(connection.connected)
+        if (connection.connected) {
+          const start = new Date()
+          start.setHours(0, 0, 0, 0)
+          const end = new Date(start)
+          end.setDate(end.getDate() + 1)
+          setCalendarEvents(await getCalendarEvents(start, end))
+        }
+      })
       .catch(() => setCalendarConnected(false))
   }, [])
 
@@ -112,6 +123,7 @@ function App() {
     try {
       await disconnectCalendar()
       setCalendarConnected(false)
+      setCalendarEvents([])
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : 'Could not disconnect the calendar.')
     } finally {
@@ -194,6 +206,34 @@ function App() {
       </header>
 
       <section className="conversation" aria-labelledby="greeting">
+        {calendarConnected && (
+          <aside className="calendar-panel" aria-label="Today's calendar">
+            <div className="calendar-panel-heading">
+              <span className="eyebrow">Today</span>
+              <span className="calendar-count">{calendarEvents.length} event{calendarEvents.length === 1 ? '' : 's'}</span>
+            </div>
+            {calendarEvents.length === 0 ? (
+              <p className="calendar-empty">Your calendar is clear today.</p>
+            ) : (
+              <div className="calendar-events">
+                {calendarEvents.map((event) => (
+                  <div className="calendar-event" key={event.id}>
+                    <time dateTime={event.startTime}>
+                      {new Date(event.startTime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+                    </time>
+                    <div>
+                      <strong>{event.title}</strong>
+                      <span>
+                        {new Date(event.endTime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+                        {event.location ? ` · ${event.location}` : ''}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </aside>
+        )}
         <div className="conversation-heading">
           <p className="eyebrow">Your morning companion</p>
           <h1 id="greeting">What is on your mind?</h1>
