@@ -11,7 +11,13 @@ public sealed record PlanningResponse(
     IReadOnlyList<PlanningSuggestion> Suggestions,
     PlanningContextSnapshot Context);
 
-public sealed record PlanningSuggestion(string Type, string Title, string? Description);
+public sealed record PlanningSuggestion(
+    string Type,
+    string Title,
+    string? Description,
+    DateTimeOffset? StartTime = null,
+    DateTimeOffset? EndTime = null,
+    string? Location = null);
 
 public sealed record PlanningContextSnapshot(
     IReadOnlyList<string> RecentMessages,

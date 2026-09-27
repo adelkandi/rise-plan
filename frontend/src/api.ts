@@ -2,6 +2,9 @@ export type PlanningSuggestion = {
   type: string
   title: string
   description?: string
+  startTime?: string
+  endTime?: string
+  location?: string
 }
 
 export type PlanningResponse = {
@@ -106,4 +109,22 @@ export async function getCalendarEvents(
     throw new Error(`Loading calendar events failed with status ${response.status}.`)
   }
   return response.json() as Promise<CalendarEvent[]>
+}
+
+export async function createCalendarEvent(event: {
+  title: string
+  description?: string
+  startTime: string
+  endTime: string
+  location?: string
+}): Promise<CalendarEvent> {
+  const response = await fetch(`${apiBaseUrl}/api/calendar/events`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...event, confirmed: true }),
+  })
+  if (!response.ok) {
+    throw new Error(`Creating the calendar event failed with status ${response.status}.`)
+  }
+  return response.json() as Promise<CalendarEvent>
 }

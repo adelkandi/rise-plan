@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import type { CalendarEvent, PlanningSuggestion } from './api'
 import {
   createTask,
+  createCalendarEvent,
   disconnectCalendar,
   getCalendarConnection,
   getCalendarEvents,
@@ -22,6 +23,7 @@ type StructuredResponseProps = {
   suggestion: PlanningSuggestion
   onFollowUp: (message: string) => void
   onCreateTask: (suggestion: PlanningSuggestion) => void
+  onAddToCalendar: (suggestion: PlanningSuggestion) => void
   actionKey: string | null
 }
 
@@ -29,6 +31,7 @@ function StructuredResponse({
   suggestion,
   onFollowUp,
   onCreateTask,
+  onAddToCalendar,
   actionKey,
 }: StructuredResponseProps) {
   const labels: Record<string, string> = {
@@ -38,6 +41,7 @@ function StructuredResponse({
     summary: 'Context',
     task: 'Task',
     plan: 'Plan',
+    calendar: 'Calendar',
   }
 
   return (
@@ -72,6 +76,26 @@ function StructuredResponse({
         >
           {actionKey === suggestion.title ? 'Adding...' : 'Add to tasks'}
         </button>
+      )}
+      {suggestion.type === 'calendar' && suggestion.startTime && suggestion.endTime && (
+        <div className="calendar-confirmation">
+          <button
+            className="response-action-primary"
+            type="button"
+            disabled={actionKey !== null}
+            onClick={() => onAddToCalendar(suggestion)}
+          >
+            {actionKey === suggestion.title ? 'Adding...' : 'Add to Calendar'}
+          </button>
+          <button
+            className="response-action-secondary"
+            type="button"
+            disabled={actionKey !== null}
+            onClick={() => onFollowUp(`Do not add ${suggestion.title} to my calendar.`)}
+          >
+            Not now
+          </button>
+        </div>
       )}
     </div>
   )
@@ -184,6 +208,29 @@ function App() {
     }
   }
 
+  async function addSuggestedCalendarEvent(suggestion: PlanningSuggestion) {
+    if (!suggestion.startTime || !suggestion.endTime || actionKey !== null) return
+    setActionKey(suggestion.title)
+    setError(null)
+    try {
+      await createCalendarEvent({
+        title: suggestion.title,
+        description: suggestion.description,
+        startTime: suggestion.startTime,
+        endTime: suggestion.endTime,
+        location: suggestion.location,
+      })
+      setMessages((current) => [
+        ...current,
+        { id: Date.now(), role: 'rise', content: `Added "${suggestion.title}" to your calendar.` },
+      ])
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Could not add the calendar event.')
+    } finally {
+      setActionKey(null)
+    }
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -253,6 +300,7 @@ function App() {
                       suggestion={suggestion}
                       onFollowUp={sendMessage}
                       onCreateTask={createSuggestedTask}
+                      onAddToCalendar={addSuggestedCalendarEvent}
                       actionKey={actionKey}
                     />
                   ))}

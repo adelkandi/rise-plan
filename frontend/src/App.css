@@ -42,6 +42,9 @@ h1 { color: #18181b; font-size: clamp(2.3rem, 8vw, 4.3rem); letter-spacing: -.07
 .response-actions button, .response-action-primary { background: #fff; border: 1px solid #d4d4d8; border-radius: 999px; color: #5146c8; cursor: pointer; font: inherit; font-size: .7rem; padding: 6px 9px; }
 .response-actions button:hover, .response-actions button:focus-visible { border-color: #6d5ef5; }
 .response-action-primary { background: #6d5ef5; border-color: #6d5ef5; color: #fff; justify-self: start; margin-top: 5px; }
+.calendar-confirmation { align-items: center; display: flex; flex-wrap: wrap; gap: 8px; }
+.response-action-secondary { background: transparent; border: 0; color: #71717a; cursor: pointer; font: inherit; font-size: .7rem; padding: 6px 4px; }
+.response-action-secondary:hover, .response-action-secondary:focus-visible { color: #5146c8; }
 .typing { color: #a1a1aa; font-size: .85rem; }
 .typing span { animation: blink 1s infinite; }
 .prompt-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 14px; }

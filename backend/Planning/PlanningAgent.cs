@@ -136,6 +136,18 @@ public sealed class DevelopmentPlanningAgent(IPlanningContextReader contextReade
 
         if (context.Commitments.Count > 0)
         {
+            if (message.Contains("calendar", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("add", StringComparison.OrdinalIgnoreCase))
+            {
+                var commitment = context.Commitments[0];
+                suggestions.Add(new(
+                    "calendar",
+                    commitment.Title,
+                    "I can add this commitment to your connected calendar. Please confirm before I create it.",
+                    commitment.StartTime,
+                    commitment.EndTime));
+            }
+
             suggestions.Add(new(
                 "summary",
                 "Protect your commitments",
