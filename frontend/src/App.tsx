@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
-import type { CalendarEvent, PlanningSuggestion } from './api'
+import type { CalendarEvent, DailyPlan, PlanningSuggestion } from './api'
 import {
   createTask,
   createCalendarEvent,
@@ -8,6 +8,7 @@ import {
   getCalendarConnection,
   getCalendarEvents,
   getGoogleCalendarConnectUrl,
+  generateDailyPlan,
   sendChatMessage,
 } from './api'
 import './App.css'
@@ -120,6 +121,8 @@ function App() {
   const [calendarConnected, setCalendarConnected] = useState(false)
   const [calendarBusy, setCalendarBusy] = useState(false)
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([])
+  const [dailyPlan, setDailyPlan] = useState<DailyPlan | null>(null)
+  const [planBusy, setPlanBusy] = useState(false)
 
   useEffect(() => {
     void getCalendarConnection()
@@ -152,6 +155,21 @@ function App() {
       setError(requestError instanceof Error ? requestError.message : 'Could not disconnect the calendar.')
     } finally {
       setCalendarBusy(false)
+    }
+
+  }
+
+  async function buildTodayPlan() {
+    if (planBusy) return
+    setPlanBusy(true)
+    setError(null)
+    try {
+      const today = new Date().toISOString().slice(0, 10)
+      setDailyPlan(await generateDailyPlan(today))
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Could not generate the daily plan.')
+    } finally {
+      setPlanBusy(false)
     }
   }
 
@@ -286,6 +304,36 @@ function App() {
           <h1 id="greeting">What is on your mind?</h1>
           <p className="subtitle">Start anywhere. Rise will help you find what matters without over-planning your day.</p>
         </div>
+
+        <section className="plan-panel" aria-labelledby="plan-heading">
+          <div className="plan-panel-heading">
+            <div>
+              <p className="eyebrow">Daily planning</p>
+              <h2 id="plan-heading">Make today realistic</h2>
+            </div>
+            <button className="calendar-button" type="button" onClick={buildTodayPlan} disabled={planBusy}>
+              {planBusy ? 'Planning...' : 'Build today’s plan'}
+            </button>
+          </div>
+          {dailyPlan && (
+            <>
+              <p className="plan-summary">{dailyPlan.summary}</p>
+              <div className="plan-items">
+                {dailyPlan.items.map((item) => (
+                  <div className={`plan-item plan-item-${item.type.toLowerCase()}`} key={item.id}>
+                    <span className="plan-item-time">
+                      {item.startTime ? new Date(item.startTime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : 'Flexible'}
+                    </span>
+                    <div>
+                      <strong>{item.title}</strong>
+                      {item.endTime && <span>{new Date(item.endTime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </section>
 
         <div className="message-list" aria-live="polite">
           {messages.map((message) => (

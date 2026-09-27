@@ -1,5 +1,7 @@
 using backend.Data;
 using backend.Domain;
+using backend.Calendar;
+using backend.Planning;
 using backend.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,6 +46,35 @@ public sealed class ServiceTests
                 CancellationToken.None));
 
         Assert.Contains("after its start", exception.Message);
+    }
+
+    [Fact]
+    public async Task Daily_planning_service_keeps_tasks_out_of_commitments()
+    {
+        await using var db = CreateDb();
+        db.Users.Add(new UserProfile { Id = "user-1" });
+        db.Commitments.Add(new Commitment
+        {
+            UserId = "user-1",
+            Title = "Work",
+            StartTime = new DateTimeOffset(2026, 9, 27, 10, 0, 0, TimeSpan.Zero),
+            EndTime = new DateTimeOffset(2026, 9, 27, 12, 0, 0, TimeSpan.Zero)
+        });
+        db.Tasks.Add(new TaskItem
+        {
+            UserId = "user-1",
+            Title = "Write report",
+            EstimatedMinutes = 60,
+            Priority = Priority.High
+        });
+        await db.SaveChangesAsync();
+
+        var service = new DailyPlanningService(db, new DevelopmentCalendarProvider());
+        var plan = await service.BuildPlanAsync("user-1", new DateOnly(2026, 9, 27), CancellationToken.None);
+        var taskItem = Assert.Single(plan.Items, item => item.TaskId is not null);
+
+        Assert.True(taskItem.EndTime <= new DateTimeOffset(2026, 9, 27, 10, 0, 0, TimeSpan.Zero) ||
+                    taskItem.StartTime >= new DateTimeOffset(2026, 9, 27, 12, 0, 0, TimeSpan.Zero));
     }
 
     private static AppDbContext CreateDb() =>

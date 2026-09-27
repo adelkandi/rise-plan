@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "cqHeR58eAaQ=",
+  "dgSpecHash": "J4l/fnM2c1o=",
   "success": true,
   "projectFilePath": "C:\\Users\\adelk\\OneDrive\\Documents\\Workspace\\rise-plan\\backend.Tests\\backend.Tests.csproj",
   "expectedPackageFiles": [
@@ -36,7 +36,10 @@
     "C:\\Users\\adelk\\.nuget\\packages\\xunit.core\\2.9.2\\xunit.core.2.9.2.nupkg.sha512",
     "C:\\Users\\adelk\\.nuget\\packages\\xunit.extensibility.core\\2.9.2\\xunit.extensibility.core.2.9.2.nupkg.sha512",
     "C:\\Users\\adelk\\.nuget\\packages\\xunit.extensibility.execution\\2.9.2\\xunit.extensibility.execution.2.9.2.nupkg.sha512",
-    "C:\\Users\\adelk\\.nuget\\packages\\xunit.runner.visualstudio\\2.8.2\\xunit.runner.visualstudio.2.8.2.nupkg.sha512"
+    "C:\\Users\\adelk\\.nuget\\packages\\xunit.runner.visualstudio\\2.8.2\\xunit.runner.visualstudio.2.8.2.nupkg.sha512",
+    "C:\\Users\\adelk\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.20\\microsoft.netcore.app.ref.9.0.20.nupkg.sha512",
+    "C:\\Users\\adelk\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.20\\microsoft.windowsdesktop.app.ref.9.0.20.nupkg.sha512",
+    "C:\\Users\\adelk\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.20\\microsoft.aspnetcore.app.ref.9.0.20.nupkg.sha512"
   ],
   "logs": []
 }

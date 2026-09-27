@@ -1,4 +1,5 @@
 using backend.Services;
+using backend.Planning;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace backend.Endpoints;
@@ -36,6 +37,13 @@ public static class ApplicationEndpoints
 
         group.MapGet("/plans/{date}", async (DateOnly date, HttpContext http, ICurrentUserService users, IDailyPlanService service, CancellationToken ct) =>
             (await service.GetAsync(users.GetRequiredUserId(http.User), date, ct)) is { } result ? Results.Ok(result) : Results.NotFound());
+        group.MapPost("/plans/{date}/generate", async (
+            DateOnly date,
+            HttpContext http,
+            ICurrentUserService users,
+            IDailyPlanningService service,
+            CancellationToken ct) =>
+            TypedResults.Ok(await service.BuildPlanAsync(users.GetRequiredUserId(http.User), date, ct)));
         group.MapPut("/plans/{date}", async (DateOnly date, HttpContext http, ICurrentUserService users, IDailyPlanService service, CreateDailyPlanRequest request, CancellationToken ct) =>
             TypedResults.Ok(await service.CreateAsync(users.GetRequiredUserId(http.User), request with { Date = date }, ct)));
         group.MapPost("/plans/{date}/items", async Task<Results<Ok<PlanItemResponse>, NotFound>> (DateOnly date, HttpContext http, ICurrentUserService users, IDailyPlanService service, CreatePlanItemRequest request, CancellationToken ct) =>

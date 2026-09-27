@@ -20,6 +20,7 @@ builder.Services.AddScoped<ICommitmentService, CommitmentService>();
 builder.Services.AddScoped<IDailyPlanService, DailyPlanService>();
 builder.Services.AddScoped<IPlanningContextService, PlanningContextService>();
 builder.Services.AddScoped<IPlanningContextReader, PlanningContextReader>();
+builder.Services.AddScoped<IDailyPlanningService, DailyPlanningService>();
 builder.Services.AddScoped<IAgentToolExecutor, AgentToolExecutor>();
 builder.Services.AddHttpClient("GoogleCalendar", client =>
 {

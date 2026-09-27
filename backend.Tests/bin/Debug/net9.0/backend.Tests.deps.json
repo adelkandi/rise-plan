@@ -12,15 +12,12 @@
           "Microsoft.EntityFrameworkCore.Relational": "9.0.14",
           "Microsoft.NET.Test.Sdk": "17.12.0",
           "backend": "1.0.0",
-          "coverlet.collector": "6.0.2",
-          "xunit": "2.9.2",
-          "xunit.runner.visualstudio": "2.8.2"
+          "xunit": "2.9.2"
         },
         "runtime": {
           "backend.Tests.dll": {}
         }
       },
-      "coverlet.collector/6.0.2": {},
       "Microsoft.AspNetCore.OpenApi/9.0.14": {
         "dependencies": {
           "Microsoft.OpenApi": "1.6.17"
@@ -43,7 +40,6 @@
       "Microsoft.EntityFrameworkCore/9.0.14": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Abstractions": "9.0.14",
-          "Microsoft.EntityFrameworkCore.Analyzers": "9.0.14",
           "Microsoft.Extensions.Caching.Memory": "9.0.14",
           "Microsoft.Extensions.Logging": "9.0.14"
         },
@@ -62,7 +58,6 @@
           }
         }
       },
-      "Microsoft.EntityFrameworkCore.Analyzers/9.0.14": {},
       "Microsoft.EntityFrameworkCore.InMemory/9.0.14": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "9.0.14",
@@ -205,9 +200,6 @@
         }
       },
       "Microsoft.TestPlatform.ObjectModel/17.12.0": {
-        "dependencies": {
-          "System.Reflection.Metadata": "1.6.0"
-        },
         "runtime": {
           "lib/netcoreapp3.1/Microsoft.TestPlatform.CoreUtilities.dll": {
             "assemblyVersion": "15.0.0.0",
@@ -482,10 +474,8 @@
           }
         }
       },
-      "System.Reflection.Metadata/1.6.0": {},
       "xunit/2.9.2": {
         "dependencies": {
-          "xunit.analyzers": "1.16.0",
           "xunit.assert": "2.9.2",
           "xunit.core": "2.9.2"
         }
@@ -498,7 +488,6 @@
           }
         }
       },
-      "xunit.analyzers/1.16.0": {},
       "xunit.assert/2.9.2": {
         "runtime": {
           "lib/net6.0/xunit.assert.dll": {
@@ -535,7 +524,6 @@
           }
         }
       },
-      "xunit.runner.visualstudio/2.8.2": {},
       "backend/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": "9.0.14",
@@ -556,13 +544,6 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
-    },
-    "coverlet.collector/6.0.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-bJShQ6uWRTQ100ZeyiMqcFlhP7WJ+bCuabUs885dJiBEzMsJMSFr7BOyeCw4rgvQokteGi5rKQTlkhfQPUXg2A==",
-      "path": "coverlet.collector/6.0.2",
-      "hashPath": "coverlet.collector.6.0.2.nupkg.sha512"
     },
     "Microsoft.AspNetCore.OpenApi/9.0.14": {
       "type": "package",
@@ -591,13 +572,6 @@
       "sha512": "sha512-lU0DBe/uZ5hNW1G6tQcikcJhjmDE4eRjRQzaiFi41zxXUMndtZQaGGVNVWXeW6M9K6T212WnBA5cwydzBYmKNA==",
       "path": "microsoft.entityframeworkcore.abstractions/9.0.14",
       "hashPath": "microsoft.entityframeworkcore.abstractions.9.0.14.nupkg.sha512"
-    },
-    "Microsoft.EntityFrameworkCore.Analyzers/9.0.14": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-u7j9NgArLjf3OzeXX1jx9K59Ytki0CfhMloXxons/cIhq/35QilP6R+NfPlQy/nMax+edeGRRfEg9hWFsjqsXA==",
-      "path": "microsoft.entityframeworkcore.analyzers/9.0.14",
-      "hashPath": "microsoft.entityframeworkcore.analyzers.9.0.14.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore.InMemory/9.0.14": {
       "type": "package",
@@ -725,13 +699,6 @@
       "path": "npgsql.entityframeworkcore.postgresql/9.0.4",
       "hashPath": "npgsql.entityframeworkcore.postgresql.9.0.4.nupkg.sha512"
     },
-    "System.Reflection.Metadata/1.6.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-COC1aiAJjCoA5GBF+QKL2uLqEBew4JsCkQmoHKbN3TlOZKa2fKLz5CpiRQKDz0RsAOEGsVKqOD5bomsXq/4STQ==",
-      "path": "system.reflection.metadata/1.6.0",
-      "hashPath": "system.reflection.metadata.1.6.0.nupkg.sha512"
-    },
     "xunit/2.9.2": {
       "type": "package",
       "serviceable": true,
@@ -745,13 +712,6 @@
       "sha512": "sha512-pot1I4YOxlWjIb5jmwvvQNbTrZ3lJQ+jUGkGjWE3hEFM0l5gOnBWS+H3qsex68s5cO52g+44vpGzhAt+42vwKg==",
       "path": "xunit.abstractions/2.0.3",
       "hashPath": "xunit.abstractions.2.0.3.nupkg.sha512"
-    },
-    "xunit.analyzers/1.16.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-hptYM7vGr46GUIgZt21YHO4rfuBAQS2eINbFo16CV/Dqq+24Tp+P5gDCACu1AbFfW4Sp/WRfDPSK8fmUUb8s0Q==",
-      "path": "xunit.analyzers/1.16.0",
-      "hashPath": "xunit.analyzers.1.16.0.nupkg.sha512"
     },
     "xunit.assert/2.9.2": {
       "type": "package",
@@ -780,13 +740,6 @@
       "sha512": "sha512-rKMpq4GsIUIJibXuZoZ8lYp5EpROlnYaRpwu9Zr0sRZXE7JqJfEEbCsUriZqB+ByXCLFBJyjkTRULMdC+U566g==",
       "path": "xunit.extensibility.execution/2.9.2",
       "hashPath": "xunit.extensibility.execution.2.9.2.nupkg.sha512"
-    },
-    "xunit.runner.visualstudio/2.8.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-vm1tbfXhFmjFMUmS4M0J0ASXz3/U5XvXBa6DOQUL3fEz4Vt6YPhv+ESCarx6M6D+9kJkJYZKCNvJMas1+nVfmQ==",
-      "path": "xunit.runner.visualstudio/2.8.2",
-      "hashPath": "xunit.runner.visualstudio.2.8.2.nupkg.sha512"
     },
     "backend/1.0.0": {
       "type": "project",

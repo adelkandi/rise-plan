@@ -44,6 +44,26 @@ export type CalendarEvent = {
   location?: string
 }
 
+export type PlanItem = {
+  id: string
+  taskId?: string
+  commitmentId?: string
+  title: string
+  description?: string
+  startTime?: string
+  endTime?: string
+  type: string
+  status: string
+  priority: string
+}
+
+export type DailyPlan = {
+  id: string
+  date: string
+  summary?: string
+  items: PlanItem[]
+}
+
 const apiBaseUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:5211'
 
 export async function sendChatMessage(
@@ -127,4 +147,12 @@ export async function createCalendarEvent(event: {
     throw new Error(`Creating the calendar event failed with status ${response.status}.`)
   }
   return response.json() as Promise<CalendarEvent>
+}
+
+export async function generateDailyPlan(date: string): Promise<DailyPlan> {
+  const response = await fetch(`${apiBaseUrl}/api/plans/${date}/generate`, { method: 'POST' })
+  if (!response.ok) {
+    throw new Error(`Generating the daily plan failed with status ${response.status}.`)
+  }
+  return response.json() as Promise<DailyPlan>
 }
